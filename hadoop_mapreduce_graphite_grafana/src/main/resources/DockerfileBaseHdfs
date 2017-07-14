@@ -1,0 +1,38 @@
+FROM ubuntu
+RUN apt-get update
+RUN apt-get -y install apt-utils
+RUN apt-get -y install net-tools #temp
+RUN apt-get -y install openjdk-8-jdk
+RUN apt-get -y install wget
+
+RUN apt-get -y install openssh-client
+RUN apt-get -y install openssh-server
+
+RUN mkdir /usr/local/hadoop
+
+RUN wget http://www.gutscheine.org/mirror/apache/hadoop/common/hadoop-2.7.3/hadoop-2.7.3.tar.gz && \
+    tar -xzvf hadoop-2.7.3.tar.gz && \
+    mv hadoop-2.7.3 /usr/local/hadoop && \
+    rm hadoop-2.7.3.tar.gz
+
+ENV HADOOP_HOME=/usr/local/hadoop/hadoop-2.7.3
+ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+ENV PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+
+RUN apt-get -y install iputils-ping #temp
+
+RUN mkdir -p /root/hdfs/namenode
+RUN mkdir -p /root/hdfs/datanode
+
+RUN ssh-keygen -t rsa -f ~/.ssh/id_rsa -P ''
+RUN cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+
+ARG JAVA_HOME
+RUN sed -i "/export JAVA_HOME=.*/c\export JAVA_HOME=$JAVA_HOME" $HADOOP_HOME/etc/hadoop/hadoop-env.sh
+RUN sed -i "/#   StrictHostKeyChecking ask/c\StrictHostKeyChecking no" /etc/ssh/ssh_config
+
+COPY hdfs-site.xml $HADOOP_HOME/etc/hadoop/hdfs-site.xml
+COPY core-site.xml $HADOOP_HOME/etc/hadoop/core-site.xml
+COPY yarn-site.xml $HADOOP_HOME/etc/hadoop/yarn-site.xml
+
+EXPOSE 22 8020 8050 8025 8030 8141 8088 8032 8188 8190 19888 50070 50010 50470 9000 10200 45454 50075 50475 50020 50090 50030 50060 13562 10020 19888

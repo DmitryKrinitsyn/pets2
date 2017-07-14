@@ -1,0 +1,8 @@
+hadoop fs -mkdir /output
+hadoop fs -mkdir /input && hadoop fs -copyFromLocal /tmp/input/input.txt /input/input.txt
+
+hadoop jar mapred-1.0-SNAPSHOT.jar SspMapReduce /input /output1
+
+docker-compose exec mapred_name_node bash
+
+cd /tmp && ./namenode_start.sh && hadoop fs -mkdir /input && hadoop fs -copyFromLocal /tmp/input/input.txt /input/input.txt && hadoop jar mapred-1.0-SNAPSHOT.jar SspMapReduceParquet /input /output1

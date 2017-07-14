@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<configuration>
+    <property>
+        <name>hadoop.tmp.dir</name>
+        <value>/root/tmp</value>
+        <description>Temporary Directory.</description>
+    </property>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://masternode:8020</value>
+    </property>
+</configuration>

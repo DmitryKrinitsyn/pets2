@@ -1,0 +1,29 @@
+version: '2.1'
+services:
+
+  test2_cas_worker_39:
+    build:
+      context: .
+      args:
+        HOSTNAME: workernode
+    hostname: workernode
+    stdin_open: true
+    tty: true
+    links:
+      - test2_cas_seed_39:seednode
+    depends_on:
+      test2_cas_seed_39:
+        condition: service_healthy
+
+  test2_cas_seed_39:
+    build:
+      context: .
+      args:
+        HOSTNAME: seednode
+    hostname: seednode
+    stdin_open: true
+    tty: true
+    ports:
+      - "9042:9042"
+    healthcheck:
+      test: "test -e /tmp/done"

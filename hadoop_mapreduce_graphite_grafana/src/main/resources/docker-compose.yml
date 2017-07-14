@@ -1,0 +1,59 @@
+version: '2.1'
+
+services:
+
+  mapred_data_node:
+    build:
+      context: ./datanode
+    hostname: slavenode1
+    stdin_open: true
+    tty: true
+    extra_hosts:
+     - "masternode:172.18.0.2"
+    healthcheck:
+      test: "test -e /usr/started"
+    depends_on:
+      - grafana_graphite
+    networks:
+      maprednet:
+        ipv4_address: 172.18.0.3
+
+  mapred_name_node:
+    build:
+      context: ./namenode
+    hostname: masternode
+    stdin_open: true
+    tty: true
+    extra_hosts:
+         - "slavenode1:172.18.0.3"
+    ports:
+      - "50070:50070"
+      - "8088:8088"
+    depends_on:
+      mapred_data_node:
+        condition: service_healthy
+    networks:
+      maprednet:
+        ipv4_address: 172.18.0.2
+
+  grafana_graphite:
+    build: ./gg
+    image: kamon/grafana_graphite
+    container_name: kamon-grafana-dashboard
+    ports:
+      - '80:80'
+      - '81:81'
+      - '8125:8125/udp'
+      - '8126:8126'
+      - '2003:2003'
+    networks:
+          maprednet:
+            ipv4_address: 172.18.0.10
+
+networks:
+  maprednet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/16
