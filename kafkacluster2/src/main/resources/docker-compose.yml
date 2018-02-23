@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  zoonode1:
+      build:
+        context: ./zookeeper
+      hostname: zoonode1
+      stdin_open: true
+      tty: true
+      environment:
+          - NODEID=1
+
+  zoonode2:
+      build:
+        context: ./zookeeper
+      hostname: zoonode2
+      stdin_open: true
+      tty: true
+      environment:
+          - NODEID=2
+
+  zoonode3:
+      build:
+        context: ./zookeeper
+      hostname: zoonode3
+      stdin_open: true
+      tty: true
+      environment:
+          - NODEID=3

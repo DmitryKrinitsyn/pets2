@@ -14,7 +14,8 @@ RUN wget http://apache.cp.if.ua/zookeeper/stable/zookeeper-3.4.10.tar.gz && \
 
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
-EXPOSE 80
+COPY zoo.cfg /usr/local/zookeeper/zookeeper-3.4.10/conf
 
-RUN /usr/local/zookeeper/zookeeper-3.4.10/bin/zkServer.sh start-foreground
+RUN mkdir /usr/local/zookeeper/zookeeper-3.4.10/bin/data
 
+CMD echo $NODEID > /usr/local/zookeeper/zookeeper-3.4.10/bin/data/myid && /usr/local/zookeeper/zookeeper-3.4.10/bin/zkServer.sh start-foreground
