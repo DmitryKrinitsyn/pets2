@@ -70,8 +70,7 @@ public class KafkaTest {
         props.put("linger.ms",1);
 
         props.put("retries",2);
-
-
+        
         props.put("batch.size", 1);
 
         //props.put("request.required.acks", "1");
