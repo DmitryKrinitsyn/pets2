@@ -21,5 +21,6 @@ EXPOSE 9092
 
 RUN sed -i "/broker.id=0/c\broker.id=$NODEID" /usr/local/kafka/kafka_2.12-1.0.0/config/server.properties
 RUN sed -i "/zookeeper.connect=localhost:2181/c\zookeeper.connect=$ZOOKEEPER_CONNECT_STRING" /usr/local/kafka/kafka_2.12-1.0.0/config/server.properties
+RUN sed -i "/#listeners=PLAINTEXT:\/\/:9092/c\listeners=PLAINTEXT:\/\/:9092" /usr/local/kafka/kafka_2.12-1.0.0/config/server.properties
 
 CMD /usr/local/kafka/kafka_2.12-1.0.0/bin/kafka-server-start.sh /usr/local/kafka/kafka_2.12-1.0.0/config/server.properties
