@@ -65,7 +65,6 @@ public class KafkaTest {
         AdminClient client = AdminClient.create(props);
 
         client.deleteTopics(Arrays.asList(TOPIC_NAME));
-
         client.close();
 
         assertThat("Topic deleted", !topicExists(TOPIC_NAME));
